@@ -39,6 +39,4 @@ fetch("http://localhost:3000/api/products")
   .catch(function (err) {
     // Une erreur est survenue
     console.error(err);
-    const main = document.getElementByClassName("main");
-    main.textContent = "Erreur pendant le chargement! " + err;
   });
