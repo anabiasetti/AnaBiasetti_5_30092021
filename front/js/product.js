@@ -12,6 +12,8 @@ function getCurrentProductId() {
 
 //function afin d'afficher les détails du produit
 function displayProductDetails(product) {
+  //Title de la page
+  document.title = product.name;
   // Image
   const img = document.createElement("img");
   img.src = product.imageUrl;
@@ -47,13 +49,35 @@ function addToCart(event) {
     cartObject = [];
   }
   // Creation d'un object qui contienne id, coleur et quantité des produits choissies pour le pannier
-  const myProduct = {
+  const productToAddToCart = {
     id: getCurrentProductId(),
     color: document.getElementById("colors").value,
-    quantity: document.getElementById("quantity").value,
+    quantity: Number(document.getElementById("quantity").value),
   };
-  console.log(myProduct);
-  cartObject.push(myProduct);
+  console.log(productToAddToCart);
+  // Vérification de quantité
+  if (productToAddToCart.quantity < 1 || productToAddToCart.quantity > 100) {
+    alert("Quantité invalide");
+    return;
+  }
+  // Vérification de la couleur
+  if (productToAddToCart.color === "") {
+    alert("Couleur invalide");
+    return;
+  }
+  //Ajout seulement de la quantité lorsqu'il s'agit du même produit et même coleur
+  let found = false;
+  for (content of cartObject) {
+    if (content.id === productToAddToCart.id && content.color === productToAddToCart.color) {
+      content.quantity += productToAddToCart.quantity;
+      found = true;
+    }
+  }
+  // Ajout d'un produit different a cause de la couleur ou du produit
+  if (!found) {
+    cartObject.push(productToAddToCart);
+  }
+
   // Persister le panier
   localStorage.setItem("cart", JSON.stringify(cartObject));
 }
