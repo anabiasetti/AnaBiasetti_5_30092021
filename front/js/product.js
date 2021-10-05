@@ -80,6 +80,8 @@ function addToCart(event) {
 
   // Persister le panier
   localStorage.setItem("cart", JSON.stringify(cartObject));
+  //Redirection vers le panier
+  window.location.replace("./cart.html");
 }
 
 const button = document.getElementById("addToCart");
