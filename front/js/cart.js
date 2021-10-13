@@ -21,10 +21,10 @@ function displayProduct(content, details) {
   divContentTitlePrice.classList.add("cart__item__content__titlePrice");
   divContent.appendChild(divContentTitlePrice);
   const h2NameOfProduct = document.createElement("h2");
-  h2NameOfProduct.textContent = details.name;
+  h2NameOfProduct.textContent = details.name + " - " + content.color;
   divContentTitlePrice.appendChild(h2NameOfProduct);
   const pPrixOfProduct = document.createElement("p");
-  pPrixOfProduct.textContent = details.price + " $";
+  pPrixOfProduct.textContent = details.price + " €";
   divContentTitlePrice.appendChild(pPrixOfProduct);
 
   //Quantité
@@ -39,7 +39,7 @@ function displayProduct(content, details) {
   const inputQuantity = document.createElement("input");
   inputQuantity.classList.add("itemQuantity");
   inputQuantity.setAttribute("type", "number");
-  inputQuantity.setAttribute("value", "42");
+  inputQuantity.setAttribute("value", content.quantity);
   inputQuantity.name = "itemQuantity";
   inputQuantity.min = "1";
   inputQuantity.max = "100";
@@ -53,6 +53,7 @@ function displayProduct(content, details) {
   const pDelete = document.createElement("p");
   pDelete.classList.add("deleteItem");
   pDelete.textContent = "Supprimer";
+  pDelete.classList.add("deleteItem");
   divDelete.appendChild(pDelete);
   divSettings.appendChild(divDelete);
 }
@@ -60,16 +61,17 @@ function displayProduct(content, details) {
 //function pour afficher le contenu du panier dans la page panier
 function displayCartContents() {
   // Récupérer les données stockées dans le pannier
-  const cartString = localStorage.getItem("cart");
-  let cartObject;
-  if (cartString) {
-    cartObject = JSON.parse(cartString);
+  const stringifiedValueFromLocalStorage = localStorage.getItem("cart");
+  let cart;
+  if (stringifiedValueFromLocalStorage) {
+    cart = JSON.parse(stringifiedValueFromLocalStorage);
   } else {
-    cartObject = [];
+    cart = [];
   }
   //parcourir l'array
-
-  for (content of cartObject) {
+  //const parce que on dois garder le contenu pour que le callback de fetch l'utilise plus tard
+  for (const content of cart) {
+    console.log(content);
     fetch("http://localhost:3000/api/products/" + content.id)
       .then(function (res) {
         if (res.ok) {
@@ -84,6 +86,21 @@ function displayCartContents() {
         // Une erreur est survenue
         console.error(err);
       });
+  }
+}
+
+//----------------gestion du buton pour supprimer le produit------------------------//
+//-------------------form pour commander------------------------------------------//
+function submit() {
+  const questions = document.getElementsByClassName("cart__order__form__question");
+  for (questionElement of questions) {
+    const inputValue = questionElement.getElementsByTagName("input")[0].value;
+    const errorElement = questionElement.getElementsByTagName("p")[0];
+    if (!inputValue) {
+      errorElement.textContent = "Error c'est vide !";
+    } else {
+      errorElement.textContent = "";
+    }
   }
 }
 
