@@ -38,19 +38,11 @@ function displayProductDetails(product) {
     select.appendChild(option);
   }
 }
+
 //function pour ajouter le produit detaillé au panier en utilisant le buton
 function addToCart(event) {
-  // Récupérer les données stockées dans le pannier
-  const stringifiedValueFromLocalStorage = localStorage.getItem("cart");
-  let cart;
-  // Si cart existe dans localstorage (n'est pas null)
-  if (stringifiedValueFromLocalStorage) {
-    // Convertir le string à objet
-    cart = JSON.parse(stringifiedValueFromLocalStorage);
-  } else {
-    // Initialiser parce que le panier n'existe pas encore
-    cart = [];
-  }
+  const cart = getCart();
+
   // Creation d'un object qui contienne id, coleur et quantité des produits choissies pour le pannier
   const productToAddToCart = {
     id: getCurrentProductId(),
@@ -80,13 +72,10 @@ function addToCart(event) {
   if (!found) {
     cart.push(productToAddToCart);
   }
-
-  // Persister le panier
-  localStorage.setItem("cart", JSON.stringify(cart));
+  storeCart(cart);
   //Redirection vers le panier
   window.location.replace("./cart.html");
 }
-
 const button = document.getElementById("addToCart");
 button.addEventListener("click", addToCart);
 
