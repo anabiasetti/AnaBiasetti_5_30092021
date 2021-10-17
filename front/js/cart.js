@@ -126,15 +126,17 @@ function changeQuantity(event) {
 }
 
 function deleteItem(event) {
-  const id = event.target.closest("article").getAttribute("data-id");
-  const color = event.target.closest("article").getAttribute("data-color");
+  const article = event.target.closest("article");
+  const id = article.getAttribute("data-id");
+  const color = article.getAttribute("data-color");
   // Reprendre cart depuis localstorage
 
   let cart = getCart();
   // Trouver le produit dans cart et supprimer
 
   cart = cart.filter((content) => !(content.id === id && content.color === color));
-
+  const sectionItems = document.getElementById("cart__items");
+  sectionItems.removeChild(article);
   // Sauvegarder dans localstorage le nouveau cart
   storeCart(cart);
 }
