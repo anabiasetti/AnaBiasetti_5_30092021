@@ -27,6 +27,7 @@ function displayProduct(content, details) {
   divContentTitlePrice.appendChild(h2NameOfProduct);
   const pPrixOfProduct = document.createElement("p");
   pPrixOfProduct.textContent = details.price + " €";
+  pPrixOfProduct.classList.add("cart__item__content__titlePrice__price");
   divContentTitlePrice.appendChild(pPrixOfProduct);
 
   //Quantité
@@ -94,6 +95,7 @@ function displayCartContents() {
       .then(function (details) {
         console.log(details);
         displayProduct(content, details);
+        calculateTotal();
       })
       .catch(function (err) {
         // Une erreur est survenue
@@ -123,6 +125,7 @@ function changeQuantity(event) {
 
   // sauvegarder dans localstorage le nouveau cart
   storeCart(cart);
+  calculateTotal();
 }
 
 function deleteItem(event) {
@@ -139,6 +142,30 @@ function deleteItem(event) {
   sectionItems.removeChild(article);
   // Sauvegarder dans localstorage le nouveau cart
   storeCart(cart);
+  calculateTotal();
+}
+
+/**
+ * Function pour calculer la quantité total d'articles
+ *
+ */
+function calculateTotal() {
+  let totalQuantity = 0;
+  let totalPrice = 0;
+
+  const sectionItems = document.getElementById("cart__items").children;
+  for (article of sectionItems) {
+    const quantity = Number(article.getElementsByClassName("itemQuantity")[0].value);
+    //totalQuantity+= quantity
+    totalQuantity = totalQuantity + quantity;
+    const price = Number(
+      article.getElementsByClassName("cart__item__content__titlePrice__price")[0].textContent.split(" ")[0]
+    );
+    totalPrice += quantity * price;
+  }
+
+  document.getElementById("totalQuantity").textContent = totalQuantity;
+  document.getElementById("totalPrice").textContent = totalPrice;
 }
 
 //-------------------form pour commander------------------------------------------//
