@@ -167,9 +167,10 @@ function calculateTotal() {
   document.getElementById("totalQuantity").textContent = totalQuantity;
   document.getElementById("totalPrice").textContent = totalPrice;
 }
-
+displayCartContents();
 //-------------------form pour commander------------------------------------------//
-function submit() {
+
+/**function submit() {
   const questions = document.getElementsByClassName("cart__order__form__question");
   for (questionElement of questions) {
     const inputValue = questionElement.getElementsByTagName("input")[0].value;
@@ -180,6 +181,126 @@ function submit() {
       errorElement.textContent = "";
     }
   }
-}
+}*/
 
-displayCartContents();
+/**
+ * Fonction pour valider et nettoyer Prenom
+ */
+const firstName = document.getElementById("firstName");
+function firstNameValidation() {
+  const firstNameValue = firstName.value.trim();
+  const validFirstName = /^[A-Za-záÁàÀâÂäÄãÃåÅæÆçÇéÉèÈêÊëËíÍìÌîÎïÏñÑóÓòÒôÔöÖõÕøØœŒßúÚùÙûÛüÜ -]+$/;
+  const firstNameErr = document.getElementById("firstNameErrorMsg");
+  if (firstNameValue == "") {
+    firstNameErr.textContent = "Prénom requis";
+  } else if (!validFirstName.test(firstNameValue)) {
+    firstNameErr.textContent = "Prénom doit être uniquement une chaîne sans espaces blancs";
+  } else {
+    firstNameErr.textContent = "";
+    //firstName.value = firstNameValue;
+    return firstNameValue;
+  }
+  return false;
+}
+firstName.addEventListener("input", firstNameValidation);
+
+/**
+ * Fonction pour valider et nettoyer Nom
+ */
+const lastName = document.getElementById("lastName");
+function lastNameValidation() {
+  const lastNameValue = lastName.value.trim();
+  const validLastName = /^[A-Za-záÁàÀâÂäÄãÃåÅæÆçÇéÉèÈêÊëËíÍìÌîÎïÏñÑóÓòÒôÔöÖõÕøØœŒßúÚùÙûÛüÜ -]+$/;
+  const lastNameErr = document.getElementById("lastNameErrorMsg");
+  if (lastNameValue == "") {
+    lastNameErr.textContent = "Nom de famille requis";
+  } else if (!validLastName.test(lastNameValue)) {
+    lastNameErr.textContent = "Nom doit être uniquement une chaîne sans espaces blancs";
+  } else {
+    lastNameErr.textContent = "";
+    return lastNameValue;
+  }
+  return false;
+}
+lastName.addEventListener("input", lastNameValidation);
+
+/**
+ * Fonction pour valider et nettoyer Addresse
+ */
+const address = document.getElementById("address");
+function addressValidation() {
+  const addressValue = address.value.trim();
+  const validAddress = /^[A-Za-záÁàÀâÂäÄãÃåÅæÆçÇéÉèÈêÊëËíÍìÌîÎïÏñÑóÓòÒôÔöÖõÕøØœŒßúÚùÙûÛüÜ 0-9-]+$/;
+  const addressErr = document.getElementById("addressErrorMsg");
+  if (addressValue == "") {
+    addressErr.textContent = "Addresse requis";
+  } else if (!validAddress.test(addressValue)) {
+    addressErr.textContent = "Nom doit être uniquement une chaîne sans espaces blancs";
+  } else {
+    addressErr.textContent = "";
+    return addressValue;
+  }
+  return false;
+}
+address.addEventListener("input", addressValidation);
+
+/**
+ * Fonction pour valider et nettoyer Ville
+ */
+const cityName = document.getElementById("city");
+function cityNameValidation() {
+  const cityNameValue = cityName.value.trim();
+  const validCityName = /^[A-Za-záÁàÀâÂäÄãÃåÅæÆçÇéÉèÈêÊëËíÍìÌîÎïÏñÑóÓòÒôÔöÖõÕøØœŒßúÚùÙûÛüÜ -]+$/;
+  const cityNameErr = document.getElementById("cityErrorMsg");
+  if (cityNameValue == "") {
+    cityNameErr.textContent = "Ville requis";
+  } else if (!validCityName.test(cityNameValue)) {
+    cityNameErr.textContent = "Ville doit être uniquement une chaîne sans espaces blancs";
+  } else {
+    cityNameErr.textContent = "";
+    return cityNameValue;
+  }
+  return false;
+}
+cityName.addEventListener("input", cityNameValidation);
+
+/**
+ * Function pour valider et nettoyer l'addresse mail
+ */
+const emailAddress = document.getElementById("email");
+function emailAddressValidation() {
+  const emailAddressValue = emailAddress.value.trim();
+  const validEmailAddress = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const emailAddressErr = document.getElementById("emailErrorMsg");
+  if (emailAddressValue == "") {
+    emailAddressErr.textContent = "Email Addresse requis";
+  } else if (!validEmailAddress.test(emailAddressValue)) {
+    emailAddressErr.textContent = "Email Addres doit être au format valide avec le symbole @";
+  } else {
+    emailAddressErr.textContent = "";
+    return emailAddressValue;
+  }
+  return false;
+}
+emailAddress.addEventListener("input", emailAddressValidation);
+
+/**
+ * Fonction pour valider et envoyer le formulaire
+ */
+function submitForm(event) {
+  event.preventDefault();
+  const firstName = firstNameValidation();
+  const lastName = lastNameValidation();
+  const email = emailAddressValidation();
+  const address = addressValidation();
+  const city = cityNameValidation();
+  if (firstName && lastName && email && address && city) {
+    console.log("formulaire ok");
+    // Créer l'objet contact
+    const contact = { firstName, lastName, email, address, city };
+    console.log(contact);
+  } else {
+    console.log("données invalides");
+  }
+}
+document.getElementById("order").onclick = submitForm;
