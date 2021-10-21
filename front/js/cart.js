@@ -296,11 +296,38 @@ function submitForm(event) {
   const city = cityNameValidation();
   if (firstName && lastName && email && address && city) {
     console.log("formulaire ok");
-    // Créer l'objet contact
+    // Creation du l'objet contact
     const contact = { firstName, lastName, email, address, city };
-    console.log(contact);
+    createOrder(contact);
   } else {
     console.log("données invalides");
   }
 }
 document.getElementById("order").onclick = submitForm;
+
+/**
+ * Fonction createOrder pour passer la commande
+ */
+function createOrder(contact) {
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ contact, products: getCart().map((product) => product.id) }),
+  })
+    .then(function (res) {
+      if (res.ok) {
+        return res.json();
+      }
+    })
+    .then(function (order) {
+      console.log(order);
+      window.location.replace("./confirmation.html?orderId=" + order.orderId);
+    })
+    .catch(function (err) {
+      // Une erreur est survenue
+      console.error(err);
+    });
+}

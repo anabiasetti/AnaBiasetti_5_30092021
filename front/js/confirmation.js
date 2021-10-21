@@ -11,6 +11,8 @@ function getCurrentOrderId() {
     window.location.replace("./index.html");
   }
 }
-
+/**
+ * Afficher le numéro de commande
+ */
 const numberOrder = document.getElementById("orderId");
 numberOrder.textContent = getCurrentOrderId();
