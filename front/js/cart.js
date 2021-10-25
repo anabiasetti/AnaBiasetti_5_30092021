@@ -8,6 +8,7 @@ function displayProduct(content, details) {
   article.classList.add("cart__item");
   article.setAttribute("data-id", content.id);
   article.setAttribute("data-color", content.color);
+  article.setAttribute("data-price", details.price);
   sectionItems.appendChild(article);
   // Image
   const divImg = document.createElement("div");
@@ -97,14 +98,14 @@ function displayCartContents() {
       .then(function (details) {
         console.log(details);
         displayProduct(content, details);
-        calculateTotal();
+        calculatePrices();
       })
       .catch(function (err) {
         // Une erreur est survenue
         console.error(err);
       });
   }
-  calculateTotal();
+  calculatePrices();
 }
 
 /**
@@ -129,7 +130,7 @@ function changeQuantity(event) {
 
   // Sauvegarder dans localstorage le nouveau cart
   storeCart(cart);
-  calculateTotal();
+  calculatePrices();
 }
 /**
  * Fonction pour supprimer un produit
@@ -152,14 +153,14 @@ function deleteItem(event) {
   // Sauvegarder dans localstorage le nouveau cart
 
   storeCart(cart);
-  calculateTotal();
+  calculatePrices();
 }
 
 /**
- * Function pour calculer la quantité total d'articles
+ * Function pour calculer le prix par produit, le prix total et la quantité total d'articles
  *
  */
-function calculateTotal() {
+function calculatePrices() {
   let totalQuantity = 0;
   let totalPrice = 0;
 
@@ -168,10 +169,10 @@ function calculateTotal() {
     const quantity = Number(article.getElementsByClassName("itemQuantity")[0].value);
     //totalQuantity+= quantity
     totalQuantity = totalQuantity + quantity;
-    const price = Number(
-      article.getElementsByClassName("cart__item__content__titlePrice__price")[0].textContent.split(" ")[0]
-    );
-    totalPrice += quantity * price;
+    const priceByProduct = Number(article.getAttribute("data-price"));
+    const titlePrice = article.getElementsByClassName("cart__item__content__titlePrice__price")[0];
+    titlePrice.textContent = quantity * priceByProduct + " €";
+    totalPrice += quantity * priceByProduct;
   }
 
   document.getElementById("totalQuantity").textContent = totalQuantity;
@@ -311,6 +312,7 @@ function createOrder(contact) {
   const cart = getCart();
   if (cart === null || cart.length === 0) {
     window.alert("Votre panier est vide");
+    cd;
     return;
   }
   fetch("http://localhost:3000/api/products/order", {
