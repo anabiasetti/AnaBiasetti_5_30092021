@@ -1,4 +1,6 @@
-// Function displayProduct afin d'afficher les details pour chaque produit ajouté au panier
+/**
+ * Function displayProduct afin d'afficher les details pour chaque produit ajouté au panier
+ *  */
 function displayProduct(content, details) {
   //<article>
   const sectionItems = document.getElementById("cart__items");
@@ -56,7 +58,7 @@ function displayProduct(content, details) {
   divDelete.classList.add("cart__item__content__settings__delete");
   const pDelete = document.createElement("p");
 
-  //----------------gestion du buton pour supprimer le produit------------------------//
+  //====================-Gestion du bouton pour supprimer le produit=======================//
   pDelete.classList.add("deleteItem");
   pDelete.textContent = "Supprimer";
   divDelete.appendChild(pDelete);
@@ -65,7 +67,7 @@ function displayProduct(content, details) {
 }
 
 /**
- * function pour afficher le contenu du panier dans la page panier
+ * Function pour afficher le contenu du panier dans la page panier
  */
 function displayCartContents() {
   // Récupérer les données stockées dans le pannier
@@ -104,8 +106,9 @@ function displayCartContents() {
   }
 }
 
-//function changeQuantity pour modifier la quantité
-
+/**
+ * Function changeQuantity pour modifier la quantité
+ */
 function changeQuantity(event) {
   // Recuperer id, color pour celui ou on a cliqué
   const id = event.target.closest("article").getAttribute("data-id");
@@ -123,24 +126,30 @@ function changeQuantity(event) {
     }
   }
 
-  // sauvegarder dans localstorage le nouveau cart
+  // Sauvegarder dans localstorage le nouveau cart
   storeCart(cart);
   calculateTotal();
 }
-
+/**
+ * Fonction pour supprimer un produit
+ *
+ */
 function deleteItem(event) {
   const article = event.target.closest("article");
   const id = article.getAttribute("data-id");
   const color = article.getAttribute("data-color");
-  // Reprendre cart depuis localstorage
 
+  // Reprendre cart depuis localstorage
   let cart = getCart();
+
   // Trouver le produit dans cart et supprimer
 
   cart = cart.filter((content) => !(content.id === id && content.color === color));
   const sectionItems = document.getElementById("cart__items");
   sectionItems.removeChild(article);
+
   // Sauvegarder dans localstorage le nouveau cart
+
   storeCart(cart);
   calculateTotal();
 }
@@ -168,20 +177,9 @@ function calculateTotal() {
   document.getElementById("totalPrice").textContent = totalPrice;
 }
 displayCartContents();
-//-------------------form pour commander------------------------------------------//
-
-/**function submit() {
-  const questions = document.getElementsByClassName("cart__order__form__question");
-  for (questionElement of questions) {
-    const inputValue = questionElement.getElementsByTagName("input")[0].value;
-    const errorElement = questionElement.getElementsByTagName("p")[0];
-    if (!inputValue) {
-      errorElement.textContent = "Error c'est vide !";
-    } else {
-      errorElement.textContent = "";
-    }
-  }
-}*/
+/**
+ * 
+ * ====================Form pour commander==================================/*
 
 /**
  * Fonction pour valider et nettoyer Prenom
@@ -265,7 +263,7 @@ function cityNameValidation() {
 cityName.addEventListener("input", cityNameValidation);
 
 /**
- * Function pour valider et nettoyer l'addresse mail
+ * Fonction pour valider et nettoyer l'addresse mail
  */
 const emailAddress = document.getElementById("email");
 function emailAddressValidation() {

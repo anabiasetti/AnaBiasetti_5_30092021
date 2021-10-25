@@ -1,4 +1,7 @@
-//function afin de recuperer le orderId de la commande courant
+/**
+ * Fonction afin de recuperer le orderId de la commande courant
+ *
+ */
 function getCurrentOrderId() {
   let orderId;
   const str = window.location.href;
@@ -11,8 +14,11 @@ function getCurrentOrderId() {
     window.location.replace("./index.html");
   }
 }
-/**
- * Afficher le numéro de commande
- */
+
+//Afficher le numéro de commande
+
 const numberOrder = document.getElementById("orderId");
 numberOrder.textContent = getCurrentOrderId();
+
+// Vider le panier
+localStorage.clear();
