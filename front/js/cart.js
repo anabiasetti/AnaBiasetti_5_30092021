@@ -310,7 +310,7 @@ document.getElementById("order").onclick = submitForm;
 function createOrder(contact) {
   const cart = getCart();
   if (cart === null || cart.length === 0) {
-    alert("Votre panier est vide");
+    window.alert("Votre panier est vide");
     return;
   }
   fetch("http://localhost:3000/api/products/order", {
