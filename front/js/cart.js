@@ -104,6 +104,7 @@ function displayCartContents() {
         console.error(err);
       });
   }
+  calculateTotal();
 }
 
 /**
@@ -307,13 +308,18 @@ document.getElementById("order").onclick = submitForm;
  * Fonction createOrder pour passer la commande
  */
 function createOrder(contact) {
+  const cart = getCart();
+  if (cart === null || cart.length === 0) {
+    alert("Votre panier est vide");
+    return;
+  }
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ contact, products: getCart().map((product) => product.id) }),
+    body: JSON.stringify({ contact, products: cart.map((product) => product.id) }),
   })
     .then(function (res) {
       if (res.ok) {
